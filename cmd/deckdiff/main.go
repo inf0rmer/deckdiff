@@ -165,6 +165,14 @@ func diffList(a []card, b []card) (result []card) {
 		}
 	}
 
+	for _, c := range a {
+		newCard := findCard(c.name, b)
+
+		if newCard.quantity == 0 {
+			result = append(result, card{name: c.name, quantity: c.quantity, adjustment: "-"})
+		}
+	}
+
 	return
 }
 
