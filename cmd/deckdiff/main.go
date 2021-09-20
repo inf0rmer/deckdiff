@@ -4,10 +4,14 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"os"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/hairyhenderson/go-fsimpl"
+	"github.com/hairyhenderson/go-fsimpl/filefs"
+	"github.com/hairyhenderson/go-fsimpl/httpfs"
 )
 
 type card struct {
@@ -47,7 +51,7 @@ func (d decklist) String() string {
 
 func main() {
 	oldPtr := flag.String("old", "", "path to a decklist in MTGO format")
-	newPtr := flag.String("new", "", "path a decklist in MTGO format")
+	newPtr := flag.String("new", "", "path to a decklist in MTGO format")
 
 	flag.Parse()
 
@@ -62,14 +66,30 @@ func main() {
 	fmt.Print(diff)
 }
 
-func loadDeck(path string) (deck *decklist, err error) {
-	data, err := os.ReadFile(path)
+func loadDeck(p string) (deck *decklist, err error) {
+	mux := fsimpl.NewMux()
+	mux.Add(filefs.FS)
+	mux.Add(httpfs.FS)
 
 	if err != nil {
 		return nil, err
 	}
 
-	scanner := bufio.NewScanner(strings.NewReader(string(data)))
+	fsys, err := mux.Lookup(strings.TrimSuffix(p, path.Base(p)))
+
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := fsys.Open(path.Base(p))
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
 	deck = &decklist{}
 	var isSideboard bool = false
 
