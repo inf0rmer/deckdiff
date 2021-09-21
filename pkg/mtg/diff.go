@@ -15,10 +15,10 @@ func diffList(a []Card, b []Card) (result []Card) {
 
 		if c.Quantity != oldCard.Quantity {
 			newQuantity := c.Quantity - oldCard.Quantity
-			adjustment := "+"
+			adjustment := Addition
 
 			if oldCard.Quantity > newQuantity {
-				adjustment = "-"
+				adjustment = Subtraction
 			}
 
 			if newQuantity < 0 {
@@ -33,7 +33,7 @@ func diffList(a []Card, b []Card) (result []Card) {
 		newCard := FindCard(c.Name, b)
 
 		if newCard.Quantity == 0 {
-			result = append(result, Card{Name: c.Name, Quantity: c.Quantity, Adjustment: "-"})
+			result = append(result, Card{Name: c.Name, Quantity: c.Quantity, Adjustment: Subtraction})
 		}
 	}
 

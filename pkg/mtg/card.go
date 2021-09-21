@@ -3,9 +3,26 @@ package mtg
 import "fmt"
 
 type Card struct {
-	Adjustment string
+	Adjustment Adjustment
 	Quantity   int64
 	Name       string
+}
+
+type Adjustment int64
+
+const (
+	Addition Adjustment = iota
+	Subtraction
+)
+
+func (a Adjustment) String() string {
+	switch a {
+	case Addition:
+		return "+"
+	case Subtraction:
+		return "-"
+	}
+	return ""
 }
 
 func (c Card) String() string {
