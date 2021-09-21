@@ -1,15 +1,10 @@
 package mtg
 
-func Diff(a Decklist, b Decklist) (result Decklist) {
-	result = Decklist{
-		Mainboard: diffList(a.Mainboard, b.Mainboard),
-		Sideboard: diffList(a.Sideboard, b.Sideboard),
-	}
-
-	return
+func Diff(a Decklist, b Decklist, r CardRenderer) (result *Decklist) {
+	return NewDecklist(diffList(a.Mainboard, b.Mainboard), diffList(a.Sideboard, b.Sideboard), r)
 }
 
-func diffList(a []Card, b []Card) (result []Card) {
+func diffList(a []*Card, b []*Card) (result []*Card) {
 	for _, c := range b {
 		oldCard := FindCard(c.Name, a)
 
@@ -25,7 +20,7 @@ func diffList(a []Card, b []Card) (result []Card) {
 				newQuantity = -newQuantity
 			}
 
-			result = append(result, Card{Name: c.Name, Quantity: newQuantity, Adjustment: adjustment})
+			result = append(result, NewCard(c.Name, newQuantity, adjustment))
 		}
 	}
 
@@ -33,7 +28,7 @@ func diffList(a []Card, b []Card) (result []Card) {
 		newCard := FindCard(c.Name, b)
 
 		if newCard.Quantity == 0 {
-			result = append(result, Card{Name: c.Name, Quantity: c.Quantity, Adjustment: Subtraction})
+			result = append(result, NewCard(c.Name, c.Quantity, Subtraction))
 		}
 	}
 

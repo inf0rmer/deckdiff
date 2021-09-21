@@ -37,7 +37,7 @@ func LoadDeck(p string) (deck *Decklist, err error) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	deck = &Decklist{}
+	deck = NewDecklist(make([]*Card, 0), make([]*Card, 0), nil)
 	var isSideboard bool = false
 
 	for scanner.Scan() {
@@ -65,7 +65,7 @@ func LoadDeck(p string) (deck *Decklist, err error) {
 	return deck, nil
 }
 
-func parseLine(line string) (crd Card, err error) {
+func parseLine(line string) (crd *Card, err error) {
 	lineR := regexp.MustCompile(`(?m)(?P<Quantity>\d)\s(?P<Name>.*)`)
 
 	results := lineR.FindStringSubmatch(line)
@@ -73,12 +73,12 @@ func parseLine(line string) (crd Card, err error) {
 	if !lineR.MatchString(line) {
 		err = fmt.Errorf("line is malformed: %s", line)
 
-		return Card{}, err
+		return nil, err
 	}
 
 	quantity, err := strconv.ParseInt(results[lineR.SubexpIndex("Quantity")], 0, 64)
 	name := results[lineR.SubexpIndex("Name")]
-	crd = Card{Quantity: quantity, Name: name}
+	crd = NewCard(name, quantity, None)
 
 	return
 }

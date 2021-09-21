@@ -1,7 +1,5 @@
 package mtg
 
-import "fmt"
-
 type Card struct {
 	Adjustment Adjustment
 	Quantity   int64
@@ -13,24 +11,19 @@ type Adjustment int64
 const (
 	Addition Adjustment = iota
 	Subtraction
+	None
 )
 
-func (a Adjustment) String() string {
-	switch a {
-	case Addition:
-		return "+"
-	case Subtraction:
-		return "-"
+func NewCard(name string, quantity int64, adjustment Adjustment) *Card {
+	return &Card{
+		Name:       name,
+		Quantity:   quantity,
+		Adjustment: adjustment,
 	}
-	return ""
 }
 
-func (c Card) String() string {
-	return fmt.Sprintf("%s%d %s \n", c.Adjustment, c.Quantity, c.Name)
-}
-
-func FindCard(name string, list []Card) (result Card) {
-	result = Card{Name: name, Quantity: 0}
+func FindCard(name string, list []*Card) (result *Card) {
+	result = NewCard("", 0, None)
 
 	for _, c := range list {
 		if c.Name == name {

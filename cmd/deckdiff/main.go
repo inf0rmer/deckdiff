@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/inf0rmer/deckdiff/pkg/cli"
 	"github.com/inf0rmer/deckdiff/pkg/mtg"
 )
 
@@ -19,7 +20,7 @@ func main() {
 	newDeck, err := mtg.LoadDeck(*newPtr)
 	check(err)
 
-	diff := mtg.Diff(*oldDeck, *newDeck)
+	diff := mtg.Diff(*oldDeck, *newDeck, cli.NewCliRenderer())
 
 	fmt.Print(diff)
 }
