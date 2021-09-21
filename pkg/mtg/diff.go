@@ -1,34 +1,10 @@
 package mtg
 
-import (
-	"fmt"
-	"regexp"
-	"strconv"
-)
-
 func Diff(a Decklist, b Decklist) (result Decklist) {
 	result = Decklist{
 		Mainboard: diffList(a.Mainboard, b.Mainboard),
 		Sideboard: diffList(a.Sideboard, b.Sideboard),
 	}
-
-	return
-}
-
-func ParseLine(line string) (crd Card, err error) {
-	lineR := regexp.MustCompile(`(?m)(?P<Quantity>\d)\s(?P<Name>.*)`)
-
-	results := lineR.FindStringSubmatch(line)
-
-	if !lineR.MatchString(line) {
-		err = fmt.Errorf("line is malformed: %s", line)
-
-		return Card{}, err
-	}
-
-	quantity, err := strconv.ParseInt(results[lineR.SubexpIndex("Quantity")], 0, 64)
-	name := results[lineR.SubexpIndex("Name")]
-	crd = Card{Quantity: quantity, Name: name}
 
 	return
 }
