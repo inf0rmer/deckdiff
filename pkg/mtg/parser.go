@@ -2,7 +2,9 @@ package mtg
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
+	"net/url"
 	"path"
 	"regexp"
 	"strconv"
@@ -11,9 +13,12 @@ import (
 	"github.com/hairyhenderson/go-fsimpl"
 	"github.com/hairyhenderson/go-fsimpl/filefs"
 	"github.com/hairyhenderson/go-fsimpl/httpfs"
+	"github.com/inf0rmer/deckdiff/pkg/parser"
 )
 
-func LoadDeck(p string) (deck *Decklist, err error) {
+func LoadDeck(u *url.URL, prs parser.DecklistParser) (deck *Decklist, err error) {
+	p := u.String()
+
 	mux := fsimpl.NewMux()
 	mux.Add(filefs.FS)
 	mux.Add(httpfs.FS)
@@ -36,7 +41,11 @@ func LoadDeck(p string) (deck *Decklist, err error) {
 
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(file)
+	contents := prs.Parse(buf.String())
+
+	scanner := bufio.NewScanner(strings.NewReader(contents))
 	deck = NewDecklist(make([]*Card, 0), make([]*Card, 0), nil)
 	var isSideboard bool = false
 
