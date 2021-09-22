@@ -1,9 +1,5 @@
 package parser
 
-type DecklistParser interface {
-	Parse(input string) string
-}
-
 type IdentityParser struct{}
 
 func NewIdentityParser() *IdentityParser {

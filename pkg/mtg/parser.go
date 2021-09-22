@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"net/url"
 	"path"
 	"regexp"
 	"strconv"
@@ -15,7 +16,9 @@ import (
 	"github.com/inf0rmer/deckdiff/pkg/parser"
 )
 
-func LoadDeck(p string, prs parser.DecklistParser) (deck *Decklist, err error) {
+func LoadDeck(u *url.URL, prs parser.DecklistParser) (deck *Decklist, err error) {
+	p := u.String()
+
 	mux := fsimpl.NewMux()
 	mux.Add(filefs.FS)
 	mux.Add(httpfs.FS)
