@@ -6,6 +6,7 @@ import (
 
 	"github.com/inf0rmer/deckdiff/pkg/cli"
 	"github.com/inf0rmer/deckdiff/pkg/mtg"
+	"github.com/inf0rmer/deckdiff/pkg/parser"
 )
 
 func main() {
@@ -14,10 +15,10 @@ func main() {
 
 	flag.Parse()
 
-	oldDeck, err := mtg.LoadDeck(*oldPtr)
+	oldDeck, err := mtg.LoadDeck(*oldPtr, parser.NewIdentityParser())
 	check(err)
 
-	newDeck, err := mtg.LoadDeck(*newPtr)
+	newDeck, err := mtg.LoadDeck(*newPtr, parser.NewIdentityParser())
 	check(err)
 
 	diff := mtg.Diff(*oldDeck, *newDeck, cli.NewCliRenderer())
