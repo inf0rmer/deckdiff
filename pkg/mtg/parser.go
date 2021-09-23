@@ -45,6 +45,11 @@ func LoadDeck(u *url.URL, prs parser.DecklistParser) (deck *Decklist, err error)
 	buf.ReadFrom(file)
 	contents := prs.Parse(buf.String())
 
+	if !parser.ValidateDecklist((contents)) {
+		err = fmt.Errorf("Decklist is malformed: \n%s", contents)
+		return nil, err
+	}
+
 	scanner := bufio.NewScanner(strings.NewReader(contents))
 	deck = NewDecklist(make([]*Card, 0), make([]*Card, 0), nil)
 	var isSideboard bool = false
@@ -78,12 +83,6 @@ func parseLine(line string) (crd *Card, err error) {
 	lineR := regexp.MustCompile(`(?m)(?P<Quantity>\d)\s(?P<Name>.*)`)
 
 	results := lineR.FindStringSubmatch(line)
-
-	if !lineR.MatchString(line) {
-		err = fmt.Errorf("line is malformed: %s", line)
-
-		return nil, err
-	}
 
 	quantity, err := strconv.ParseInt(results[lineR.SubexpIndex("Quantity")], 0, 64)
 	name := results[lineR.SubexpIndex("Name")]
