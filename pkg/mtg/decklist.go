@@ -1,6 +1,9 @@
 package mtg
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Decklist struct {
 	Mainboard []*Card
@@ -22,7 +25,7 @@ func (d Decklist) String() string {
 	result.WriteString("Main Deck: \n")
 
 	for _, c := range d.Mainboard {
-		result.WriteString(d.renderer.Render(c))
+		result.WriteString(fmt.Sprintf("%s\n", d.renderer.Render(c)))
 	}
 
 	if len(d.Sideboard) > 0 {
@@ -30,7 +33,7 @@ func (d Decklist) String() string {
 	}
 
 	for _, c := range d.Sideboard {
-		result.WriteString(d.renderer.Render(c))
+		result.WriteString(fmt.Sprintf("%s\n", d.renderer.Render(c)))
 	}
 
 	return result.String()

@@ -22,5 +22,5 @@ func (r DefaultCardRenderer) Render(c *Card) string {
 		adjustment = "-"
 	}
 
-	return fmt.Sprintf("%s%d %s \n", adjustment, c.Quantity, c.Name)
+	return fmt.Sprintf("%s%d %s", adjustment, c.Quantity, c.Name)
 }
