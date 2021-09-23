@@ -29,7 +29,7 @@ func main() {
 	newDeck, err := mtg.LoadDeck(newUrl, getParser(newUrl))
 	check(err)
 
-	diff := mtg.Diff(*oldDeck, *newDeck, cli.NewCliCardRenderer())
+	diff := mtg.Diff(oldDeck, newDeck, cli.NewCliCardRenderer())
 
 	fmt.Print(diff)
 }

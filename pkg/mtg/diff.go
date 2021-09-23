@@ -1,6 +1,6 @@
 package mtg
 
-func Diff(a Decklist, b Decklist, r CardRenderer) (result *Decklist) {
+func Diff(a *Decklist, b *Decklist, r CardRenderer) (result *Decklist) {
 	return NewDecklist(diffList(a.Mainboard, b.Mainboard), diffList(a.Sideboard, b.Sideboard), r)
 }
 
