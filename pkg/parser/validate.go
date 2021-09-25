@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func ValidateDecklist(list string) (valid bool) {
+func validateDecklist(list string) (valid bool) {
 	valid = true
 	scanner := bufio.NewScanner(strings.NewReader(list))
 

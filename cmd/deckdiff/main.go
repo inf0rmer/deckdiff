@@ -6,6 +6,7 @@ import (
 	"net/url"
 
 	"github.com/inf0rmer/deckdiff/pkg/cli"
+	"github.com/inf0rmer/deckdiff/pkg/loader"
 	"github.com/inf0rmer/deckdiff/pkg/mtg"
 	"github.com/inf0rmer/deckdiff/pkg/parser"
 )
@@ -23,10 +24,16 @@ func main() {
 
 	check(err)
 
-	oldDeck, err := mtg.LoadDeck(oldUrl, getParser(oldUrl))
+	oldDeckInput, err := loader.Load(oldUrl)
 	check(err)
 
-	newDeck, err := mtg.LoadDeck(newUrl, getParser(newUrl))
+	oldDeck, err := getParser(oldUrl).Parse(oldDeckInput)
+	check(err)
+
+	newDeckInput, err := loader.Load(newUrl)
+	check(err)
+
+	newDeck, err := getParser(newUrl).Parse(newDeckInput)
 	check(err)
 
 	diff := mtg.Diff(oldDeck, newDeck, cli.NewCliCardRenderer())
