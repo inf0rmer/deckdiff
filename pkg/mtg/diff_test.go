@@ -28,3 +28,26 @@ func TestDecklistDiff(t *testing.T) {
 
 	assert.Equal(t, expected, actual)
 }
+
+func TestDecklistDiffAddition(t *testing.T) {
+	a := NewDecklist(
+		[]*Card{NewCard("Wooded Foothills", 2, None)},
+		nil,
+		NewDefaultCardRenderer(),
+	)
+
+	b := NewDecklist(
+		[]*Card{NewCard("Wooded Foothills", 3, None)},
+		nil,
+		NewDefaultCardRenderer(),
+	)
+
+	actual := Diff(a, b, NewDefaultCardRenderer())
+	expected := NewDecklist(
+		[]*Card{NewCard("Wooded Foothills", 1, Addition)},
+		nil,
+		NewDefaultCardRenderer(),
+	)
+
+	assert.Equal(t, expected, actual)
+}

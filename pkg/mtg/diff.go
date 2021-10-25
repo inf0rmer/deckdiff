@@ -12,7 +12,7 @@ func diffList(a []*Card, b []*Card) (result []*Card) {
 			newQuantity := c.Quantity - oldCard.Quantity
 			adjustment := Addition
 
-			if oldCard.Quantity > newQuantity {
+			if oldCard.Quantity > c.Quantity {
 				adjustment = Subtraction
 			}
 
