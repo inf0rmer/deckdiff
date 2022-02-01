@@ -1,11 +1,11 @@
 package parser
 
 import (
-	"log"
 	"regexp"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/inf0rmer/deckdiff/pkg/mtg"
 )
 
 type DeckboxParser struct{}
@@ -14,14 +14,14 @@ func NewDeckboxParser() *DeckboxParser {
 	return &DeckboxParser{}
 }
 
-func (p DeckboxParser) Parse(input string) (result string) {
+func (p DeckboxParser) Parse(input string) (*mtg.Decklist, error) {
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(input))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	result = doc.Find("body").Text()
+	result := doc.Find("body").Text()
 
 	re := regexp.MustCompile(`(?m)[a-zA-Z]{0}(\d{1})`)
 	result = re.ReplaceAllString(result, "\n${1}")
@@ -34,5 +34,5 @@ func (p DeckboxParser) Parse(input string) (result string) {
 
 	result = strings.Trim(result, "\n")
 
-	return
+	return toDecklist(result)
 }

@@ -8,7 +8,7 @@ import (
 
 type CliCardRenderer struct{}
 
-func NewCliRenderer() mtg.CardRenderer {
+func NewCliCardRenderer() mtg.CardRenderer {
 	return CliCardRenderer{}
 }
 
@@ -25,5 +25,5 @@ func (r CliCardRenderer) Render(c *mtg.Card) string {
 		d = color.New(color.FgRed)
 	}
 
-	return d.Sprintf("%s%d %s \n", adjustment, c.Quantity, c.Name)
+	return d.Sprintf("%s%d %s", adjustment, c.Quantity, c.Name)
 }

@@ -1,6 +1,6 @@
 package mtg
 
-func Diff(a Decklist, b Decklist, r CardRenderer) (result *Decklist) {
+func Diff(a *Decklist, b *Decklist, r CardRenderer) (result *Decklist) {
 	return NewDecklist(diffList(a.Mainboard, b.Mainboard), diffList(a.Sideboard, b.Sideboard), r)
 }
 
@@ -12,7 +12,7 @@ func diffList(a []*Card, b []*Card) (result []*Card) {
 			newQuantity := c.Quantity - oldCard.Quantity
 			adjustment := Addition
 
-			if oldCard.Quantity > newQuantity {
+			if oldCard.Quantity > c.Quantity {
 				adjustment = Subtraction
 			}
 
